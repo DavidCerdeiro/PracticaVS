@@ -173,21 +173,101 @@ Mediante esto, los servicios definidos en el archivo de Docker Compose, **docker
 ```yaml
 trigger:
 - master
+
 pool:
-vmImage: 'ubuntu-latest'
+  vmImage: 'ubuntu-latest'
+
 steps:
 - task: UseDotNet@2
-inputs:
-packageType: 'sdk'
-version: '3.1.x'
-installationPath: $(Agent.ToolsDirectory)/dotnet
+  inputs:
+    packageType: 'sdk'
+    version: '3.1.x'
+    installationPath: $(Agent.ToolsDirectory)/dotnet
+
 - script: |
-terraform init
-terraform validate
-displayName: 'Terraform Init and Validate'
+    terraform init
+    terraform validate
+  displayName: 'Terraform Init and Validate'
+  
 - script: 'terraform plan -out=tfplan'
-displayName: 'Terraform Plan'
+  displayName: 'Terraform Plan'
+  
 - script: 'terraform apply -auto-approve tfplan'
-displayName: 'Terraform Apply'
+  displayName: 'Terraform Apply'
 ```
+Nos encontramos con el segundo archivo requerido en la práctica, procedemos a desglosarlo:
+```yaml
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+```
+Al igual que en el archivo anterior, mediante la sección *trigger* definimos cuando debe ejecutarse el pipeline, en este caso, cuando se realicen cambios en la rama **master** del repositorio y mediante la sección *pool* definimos la máquina virtual en la que se van a ejecutar los pasos del *Pipeline*, que tambien usará la imagen "*ubuntu-latest*".
+
+Tras esto, pasamos al bloque *steps*, donde definimos la secuencia de pasos que se ejecutarán en el *Pipeline*:
+```yaml
+steps:
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '3.1.x'
+    installationPath: $(Agent.ToolsDirectory)/dotnet
+
+- script: |
+    terraform init
+    terraform validate
+  displayName: 'Terraform Init and Validate'
+  
+- script: 'terraform plan -out=tfplan'
+  displayName: 'Terraform Plan'
+  
+- script: 'terraform apply -auto-approve tfplan'
+  displayName: 'Terraform Apply'
+```
+Procedemos a dividirlo:
+```yaml
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '3.1.x'
+    installationPath: $(Agent.ToolsDirectory)/dotnet
+```
+En esta primera tarea usamos la versión 2 de la tarea UseDotNet y se realizará lo siguiente:
+```yaml
+    packageType: 'sdk'
+```
+Especificamos que se va a instalar el *Software Development Kit (SDK) de .NET*.
+```yaml
+    version: '3.1.x'
+```
+Concretamente la versión *3.1.x* de lo anterior.
+```yaml
+    installationPath: $(Agent.ToolsDirectory)/dotnet
+```
+Y se establece la ubicación donde se instalará el SDK de .NET en el agente de compilación.
+
+Segunda bloque:
+```yaml
+- script: |
+    terraform init
+    terraform validate
+  displayName: 'Terraform Init and Validate'
+```
+Ejecutamos un script que contiene dos comandos propios de *Terraform*, tal como vimos en la práctica anterior, con el primer comando inicializamos el directorio de trabajo de Terraform y mediante el segundo verificamos la sintaxis y validez de los archivos de configuración de Terraform. Tal como vimos anteriormente, mediante *displayName*, le damos un nombre a este paso en la interfaz del usuario.
+
+Tercer bloque:
+```yaml
+- script: 'terraform plan -out=tfplan'
+  displayName: 'Terraform Plan'
+```
+Ejecutamos el comando *terraform plan* que genera un plan de ejecución y mediante la opción *-out=tfplan* lo guardamos en un archivo llamado *tfplan*. Por último, lo volvemos a asignar un nombre a este paso que se mostrará en la intefaz de usuario.
+
+Último bloque:
+```yaml
+- script: 'terraform apply -auto-approve tfplan'
+  displayName: 'Terraform Apply'
+```
+Ejecutamos el comando indicado, el cual vimos también en la práctica anterior, mediante el que se aplicará los cambios en la infraestructura. Con la opción *-auto-approve* indicamos que Terraform no solicite confirmación antes de aplicar los cambios y por último, indicamos que el archivo de plan que se utilizará para aplicar los cambios sea *tfplan*. Volviéndole a asignar un nombre a este paso como último paso.
+
 ### Pipeline - GitLab
