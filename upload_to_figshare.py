@@ -9,8 +9,8 @@ oauth_token = '8b60245c20dfed8b906adde33d80c12eb8720e7b937ef4e29548785feb78a8087
 file_path = './grafica_sensor.png'
 
 # Nombre y descripción del artículo en Figshare
-article_title = 'Título de tu artículo en Figshare'
-article_description = 'Descripción de tu artículo en Figshare'
+article_title = 'grafico.py'
+article_description = 'asas'
 
 # URL de la API de Figshare para subir un archivo
 upload_url = f'https://api.figshare.com/v2/account/articles/24926016/files'
