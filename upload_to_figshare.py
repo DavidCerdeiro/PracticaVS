@@ -25,7 +25,7 @@ def upload_to_figshare(file_path, figshare_token, article_id):
 # Configurar las variables necesarias
 figshare_token = '64d223981d339c71a4a242888220713bbeb16509ddfbedc5eb6c50bd3b5b7da01d0b7a5faf9904d779ddbf19513e3bdc99a87e26a878531efc6956ad09fcb708'
 article_id = '24926016'
-file_path = './venv/grafica_sensor.png'
+file_path = './grafica_sensor.png'
 
 # Llamar a la función para subir el archivo
 upload_to_figshare(file_path, figshare_token, article_id)
