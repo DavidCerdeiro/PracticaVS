@@ -12,7 +12,7 @@ article_title = 'grafico.png'
 article_description = 'Archivo de imagen'
 
 # URL de la API de Figshare para subir un archivo
-upload_url = f'https://api.figshare.com/v2/account/articles/24926016/files'
+upload_url = 'https://api.figshare.com/v2/account/articles/24926016/files'
 
 # Obtener el tamaño del archivo
 file_size = os.path.getsize(file_path)
@@ -36,7 +36,7 @@ except requests.exceptions.RequestException as e:
     print(f"Detalles del error: {initiate_response.text}")
     exit(1)
 
-# Step 2: Upload the file
+# Step 2: Upload the file using the correct upload URL
 try:
     with open(file_path, 'rb') as file:
         response = requests.put(upload_url, headers={
