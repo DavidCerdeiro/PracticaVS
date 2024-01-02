@@ -1,4 +1,3 @@
-from __future__ import print_statement
 import time
 import swagger_client
 from swagger_client.rest import ApiException
@@ -9,10 +8,10 @@ swagger_client.configuration.access_token = '8b60245c20dfed8b906adde33d80c12eb87
 
 # create an instance of the API class
 api_instance = swagger_client.ArticlesApi()
-articleId = 24926016 # Long | Article unique identifier
-file =  './grafica_sensor.png'
+articleId = 24926016  # Long | Article unique identifier
+file = './grafica_sensor.png'
 
-try: 
+try:
     # Initiate Upload
     api_response = api_instance.private_article_upload_initiate(articleId, file)
     pprint(api_response)
