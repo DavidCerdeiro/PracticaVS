@@ -1,19 +1,20 @@
 import os
-from figshare.api import Figshare
-from figshare.figshare_article import FigshareArticle
+import sys
+
+# Agregar el directorio figshare_api al path para importar Figshare
+sys.path.append(os.path.join(os.path.dirname(__file__), "venv/lib/python3.*/site-packages"))
+
+from figshare.figshare_api import Figshare
 
 def upload_to_figshare(api_key, file_path, article_title, article_description):
     # Configurar la conexión a Figshare
     figshare = Figshare(api_key=api_key)
 
     # Crear un nuevo artículo en Figshare
-    article = FigshareArticle(figshare)
-    article.title = article_title
-    article.description = article_description
-    article.add_file(file_path)
+    article = figshare.create_article(title=article_title, description=article_description)
 
-    # Guardar el artículo en Figshare
-    article.save()
+    # Subir el archivo al artículo
+    article.add_file(file_path)
 
 if __name__ == "__main__":
     # Definir las variables necesarias
