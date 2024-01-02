@@ -13,7 +13,7 @@ article_title = 'Título de tu artículo en Figshare'
 article_description = 'Descripción de tu artículo en Figshare'
 
 # URL de la API de Figshare para subir un archivo
-upload_url = 'https://api.figshare.com/v2/account/articles/24926016/files'
+upload_url = f'https://api.figshare.com/v2/account/articles/{article_id}/files'
 
 # Obtener el tamaño del archivo
 file_size = os.path.getsize(file_path)
