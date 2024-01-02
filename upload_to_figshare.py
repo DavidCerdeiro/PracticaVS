@@ -1,5 +1,5 @@
-import requests
 import os
+import requests
 
 def upload_to_figshare(file_path, figshare_token, article_id):
     # Configurar la URL de la API de Figshare para cargar archivos en un artículo específico
