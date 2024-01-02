@@ -41,6 +41,7 @@ upload-job:
     - source venv/bin/activate || true  # Activa el entorno virtual (agregué || true para evitar errores si no se activa)
     - pip install figshare
     - pip install requests  # Agrega esta línea para instalar el módulo requests
+    - pip install git+https://github.com/figshare/figshare_api.git  # Instala el cliente Swagger para Figshare
     - ls .
     - cp grafica_sensor.png ./venv  # Copia el PNG al directorio del entorno virtual
     - python3 upload_to_figshare.py
