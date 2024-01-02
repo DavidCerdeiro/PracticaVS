@@ -14,7 +14,7 @@ article_title = 'Título de tu artículo en Figshare'
 article_description = 'Descripción de tu artículo en Figshare'
 
 # URL de la API de Figshare para subir un archivo
-upload_url = 'https://api.figshare.com/v2/account/articles/<24926016>/files'
+upload_url = 'https://api.figshare.com/v2/account/articles/24926016/files'
 # Reemplaza <ARTICLE_ID> con el ID del artículo al que deseas adjuntar el archivo
 
 # Realizar la solicitud para obtener la URL de carga del archivo
