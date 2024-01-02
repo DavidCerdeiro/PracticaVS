@@ -18,7 +18,7 @@ upload_url = f'https://api.figshare.com/v2/account/articles/24926016/files'
 # Obtener el tamaño del archivo
 file_size = os.path.getsize(file_path)
 
-# Realizar la solicitud para obtener la URL de carga del archivo y cargar el archivo en una sola conexión
+# Realizar la solicitud para cargar el archivo en una sola conexión
 try:
     with open(file_path, 'rb') as file:
         response = requests.post(upload_url, headers={
@@ -29,7 +29,7 @@ try:
             'name': article_title,
             'description': article_description,
             'size': file_size
-        }, data=file.read())
+        }, data=file)
         response.raise_for_status()
 except requests.exceptions.RequestException as e:
     print(f"Error al subir el archivo: {e}")
