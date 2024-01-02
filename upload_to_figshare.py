@@ -23,13 +23,12 @@ try:
     with open(file_path, 'rb') as file:
         response = requests.post(upload_url, headers={
             'Authorization': f'Bearer {oauth_token}',
-            'Content-Type': 'application/octet-stream',
             'Content-Disposition': f'attachment; filename={article_title}',
         }, params={
             'name': article_title,
             'description': article_description,
             'size': file_size
-        }, data=file)
+        }, files={'file': file})
         response.raise_for_status()
 except requests.exceptions.RequestException as e:
     print(f"Error al subir el archivo: {e}")
