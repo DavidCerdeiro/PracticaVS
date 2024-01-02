@@ -40,7 +40,6 @@ upload-job:
     - python3 -m venv venv
     - source venv/bin/activate || true
     - pip install figshare requests
-    - pip install swagger-client
     - echo "Uploading graphs to Figshare..."
     - cp grafica_sensor.png ./venv
     - python3 upload_to_figshare.py
