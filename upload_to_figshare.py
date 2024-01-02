@@ -29,7 +29,7 @@ try:
     })
     initiate_response.raise_for_status()
     initiate_data = initiate_response.json()
-    upload_url = initiate_data.get('upload_url')
+    upload_url = initiate_data.get('location')
     upload_token = initiate_data.get('upload_token')
 except requests.exceptions.RequestException as e:
     print(f"Error al iniciar la carga del archivo: {e}")
