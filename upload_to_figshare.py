@@ -1,9 +1,7 @@
 #!/usr/bin/env python
 
 import hashlib
-import json
 import os
-
 import requests
 from requests.exceptions import HTTPError
 
@@ -18,8 +16,10 @@ ARTICLE_TITLE = 'My Article Title'
 def raw_issue_request(method, url, data=None, binary=False):
     headers = {'Authorization': 'token ' + TOKEN}
     if data is not None and not binary:
-        data = json.dumps(data)
-    response = requests.request(method, url, headers=headers, data=data)
+        response = requests.post(url, headers=headers, json=data)
+    else:
+        response = requests.request(method, url, headers=headers, data=data)
+    
     try:
         response.raise_for_status()
         try:
@@ -94,10 +94,12 @@ def initiate_new_upload(article_id, file_name):
         'name': os.path.basename(file_name),
         'md5': md5,
         'size': size,
-        'file': (os.path.basename(file_name), open(file_name, 'rb'))
     }
 
-    result = issue_request('POST', endpoint, data=data)
+    with open(file_name, 'rb') as fin:
+        files = {'file': (os.path.basename(file_name), fin)}
+        result = issue_request('POST', endpoint, data=data, files=files)
+
     print('Initiated file upload:', result['location'], '\n')
 
     result = raw_issue_request('GET', result['location'])
