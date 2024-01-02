@@ -8,7 +8,7 @@ import requests
 from requests.exceptions import HTTPError
 
 BASE_URL = 'https://api.figshare.com/v2/{endpoint}'
-TOKEN = '64d223981d339c71a4a242888220713bbeb16509ddfbedc5eb6c50bd3b5b7da01d0b7a5faf9904d779ddbf19513e3bdc99a87e26a878531efc6956ad09fcb708'
+TOKEN = '52eae7844e5a73ad33b324d61131c76d4fbc1477ad6ec9813ea5c749845f2a6e7d5eb16bf28f650835fb560a8e10dcb5d9a863c6491caed5615b1736197e3a52'
 CHUNK_SIZE = 1048576
 
 FILE_PATH = './grafica_sensor.png'
