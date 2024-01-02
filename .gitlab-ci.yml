@@ -39,8 +39,7 @@ upload-job:
     - apt-get install -y python3-venv
     - python3 -m venv venv
     - source venv/bin/activate || true
-    - pip install figshare
-    - pip install requests
+    - pip install figshare requests
     - cp grafica_sensor.png ./venv
     - python3 upload_to_figshare.py
     - echo "Graphs uploaded to Figshare successfully."
