@@ -39,7 +39,6 @@ graph-job:
   stage: graph
   script:
     - echo "Installing dependencies..."
-    - apt-get install -y python3-pip
     - pip3 install pandas
     - echo "Generating graphs..."
     - python3 grafico.py
