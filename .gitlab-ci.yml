@@ -55,5 +55,6 @@ upload-job:
     - python3 -m venv venv  # Crea el entorno virtual
     - source venv/bin/activate || true  # Activa el entorno virtual (agregué || true para evitar errores si no se activa)
     - pip install figshare
+    - pip install requests  # Agrega esta línea para instalar el módulo requests
     - python3 upload_to_figshare.py
     - echo "Graphs uploaded to Figshare successfully."
