@@ -41,7 +41,6 @@ upload-job:
     - source venv/bin/activate || true
     - pip install figshare
     - pip install requests
-    - pip install git+https://github.com/figshare/figshare_api.git
-    - cp grafica_sensor.png ./venv  # Asegúrate de que la imagen esté en el directorio correcto
+    - cp grafica_sensor.png ./venv
     - python3 upload_to_figshare.py
     - echo "Graphs uploaded to Figshare successfully."
