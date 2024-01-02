@@ -90,9 +90,12 @@ def initiate_new_upload(article_id, file_name):
     endpoint = endpoint.format(article_id)
 
     md5, size = get_file_check_data(file_name)
-    data = {'name': os.path.basename(file_name),
-            'md5': md5,
-            'size': size}
+    data = {
+        'name': os.path.basename(file_name),
+        'md5': md5,
+        'size': size,
+        'file': (os.path.basename(file_name), open(file_name, 'rb'))
+    }
 
     result = issue_request('POST', endpoint, data=data)
     print('Initiated file upload:', result['location'], '\n')
@@ -113,14 +116,6 @@ def upload_file(file_path):
     list_files_of_article(article_id)
 
     file_info = initiate_new_upload(article_id, file_path)
-    url = file_info['upload_url']
-
-    with open(file_path, 'rb') as fin:
-        data = fin.read()
-        raw_issue_request('PUT', url, data=data, binary=True)
-        print('Uploaded file:', file_path)
-
-    complete_upload(article_id, file_info['id'])
     list_files_of_article(article_id)
 
 if __name__ == '__main__':
