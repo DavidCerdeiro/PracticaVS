@@ -42,7 +42,7 @@ graph-job:
     - apt-get install -y python3-venv  # Instala el paquete para crear entornos virtuales
     - python3 -m venv venv  # Crea el entorno virtual
     - source venv/bin/activate || true  # Activa el entorno virtual (agregué || true para evitar errores si no se activa)
-    - pip install pandas
+    - pip install pandas matplotlib  # Instala pandas y matplotlib
     - echo "Generating graphs..."
     - python3 grafico.py
     - echo "Graph generation complete."
