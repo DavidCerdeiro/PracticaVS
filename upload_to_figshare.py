@@ -7,7 +7,7 @@ access_token = '52eae7844e5a73ad33b324d61131c76d4fbc1477ad6ec9813ea5c749845f2a6e
 headers = {'Authorization': f'Bearer {access_token}'}
 
 # Ruta del archivo PNG que deseas subir
-file_path = 'path/to/your/file.png'
+file_path = './grafica_sensor.png'
 
 # Nombre y descripción del artículo en Figshare
 article_title = 'Título de tu artículo en Figshare'
