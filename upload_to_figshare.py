@@ -96,13 +96,15 @@ def initiate_new_upload(article_id, file_name):
         'size': size,
     }
 
-    with open(file_name, 'rb') as fin:
-        files = {'file': (os.path.basename(file_name), fin)}
-        result = issue_request('POST', endpoint, data=data, files=files)
-
+    result = issue_request('POST', endpoint, data=data)
     print('Initiated file upload:', result['location'], '\n')
 
-    result = raw_issue_request('GET', result['location'])
+    upload_url = result['location']
+    with open(file_name, 'rb') as fin:
+        files = {'filedata': fin}
+        response = requests.post(upload_url, files=files)
+
+    response.raise_for_status()
 
     return result
 
