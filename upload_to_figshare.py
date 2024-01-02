@@ -1,14 +1,15 @@
 import figshare
 
 def upload_image(api_token, file_path):
-    # Create a Figshare client
-    client = figshare.Figshare(api_token=api_token)
+    # Create an authenticated session
+    auth = figshare.FigshareAuth(api_token=api_token)
+    session = figshare.FigshareSession(auth)
 
     # Create a new article (data structure to store your files)
-    article = client.article()
+    article = session.create_article(title="My Graph Article", defined_type="dataset")
 
-    # Add a file to the article
-    article.add_file(file_path)
+    # Upload the file to the article
+    article.upload_file(file_path)
 
     # Save the article
     article.save()
