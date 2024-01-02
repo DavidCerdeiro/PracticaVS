@@ -1,31 +1,24 @@
-import os
-import requests
+import swagger_client
+from swagger_client.rest import ApiException
 
-def upload_to_figshare(file_path, figshare_token, article_id):
-    # Configurar la URL de la API de Figshare para cargar archivos en un artículo específico
-    upload_url = f'https://api.figshare.com/v2/account/articles/{article_id}/files'
+# Configurar OAuth2 access token para la autorización: OAuth2
+swagger_client.configuration.access_token = '64d223981d339c71a4a242888220713bbeb16509ddfbedc5eb6c50bd3b5b7da01d0b7a5faf9904d779ddbf19513e3bdc99a87e26a878531efc6956ad09fcb708'
 
-    # Configurar el encabezado con el token de Figshare
-    headers = {
-        'Authorization': f'token {figshare_token}'
-    }
+# Crear una instancia de la clase de la API
+api_instance = swagger_client.ArticlesApi()
 
-    # Cargar el archivo al artículo de Figshare
-    with open(file_path, 'rb') as file:
-        files = {'filedata': (os.path.basename(file_path), file)}
-        response = requests.post(upload_url, headers=headers, files=files)
+# ID único del artículo
+article_id = 789
 
-    # Manejar la respuesta de Figshare
-    if response.status_code == 201:
-        print(f'Successfully uploaded {file_path} to Figshare!')
-    else:
-        print(f'Failed to upload {file_path} to Figshare. Status code: {response.status_code}')
-        print(response.text)
-
-# Configurar las variables necesarias
-figshare_token = '64d223981d339c71a4a242888220713bbeb16509ddfbedc5eb6c50bd3b5b7da01d0b7a5faf9904d779ddbf19513e3bdc99a87e26a878531efc6956ad09fcb708'
-article_id = '24926016'
+# Ruta del archivo PNG que quieres subir
 file_path = './grafica_sensor.png'
 
-# Llamar a la función para subir el archivo
-upload_to_figshare(file_path, figshare_token, article_id)
+try:
+    # Configurar el objeto de carga de archivo
+    file_payload = swagger_client.FileUploadDto(file_path=file_path)
+
+    # Llamada para crear un nuevo archivo en el artículo
+    api_response = api_instance.create_file(article_id, file_payload)
+    print(api_response)
+except ApiException as e:
+    print("Excepción al llamar a ArticlesApi->create_file: %s\n" % e)
