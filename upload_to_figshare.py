@@ -44,11 +44,10 @@ try:
             'Content-Type': 'application/octet-stream',
             'Content-Disposition': f'attachment; filename={article_title}',
             'Upload-Token': upload_token
-        }, data=file)
+        }, data=file.read())  # Cambiado de data=file a data=file.read()
         response.raise_for_status()
 except requests.exceptions.RequestException as e:
     print(f"Error al subir el archivo: {e}")
-    print(f"Detalles del error: {response.text}")
     exit(1)
 
 print("Archivo subido exitosamente.")
