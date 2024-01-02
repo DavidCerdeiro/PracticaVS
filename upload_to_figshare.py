@@ -106,7 +106,7 @@ def complete_upload(article_id, file_id):
     issue_request('POST', 'account/articles/{}/files/{}'.format(article_id, file_id))
 
 
-def upload_file(article_id, file_path):
+def upload_file(file_path):
     list_articles()
     article_id = create_article(ARTICLE_TITLE)
     list_articles()
@@ -122,7 +122,6 @@ def upload_file(article_id, file_path):
 
     complete_upload(article_id, file_info['id'])
     list_files_of_article(article_id)
-
 
 if __name__ == '__main__':
     upload_file(FILE_PATH)
