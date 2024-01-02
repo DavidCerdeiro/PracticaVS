@@ -8,7 +8,7 @@ variables:
 
 before_script:
   - apt-get update -qy
-  - apt-get install -y python3-pip
+  - apt-get install -y python3-venv
 
 clone-job:
   stage: clone
@@ -20,7 +20,7 @@ clone-job:
 graph-job:
   stage: graph
   script:
-    - echo "Installing dependencies..."
+    - echo "Installing dependencies for graph job..."
     - apt-get install -y python3-venv
     - python3 -m venv venv
     - source venv/bin/activate || true
@@ -35,11 +35,12 @@ graph-job:
 upload-job:
   stage: upload
   script:
-    - echo "Uploading graphs to Figshare..."
+    - echo "Installing dependencies for upload job..."
     - apt-get install -y python3-venv
     - python3 -m venv venv
     - source venv/bin/activate || true
     - pip install figshare requests
+    - echo "Uploading graphs to Figshare..."
     - cp grafica_sensor.png ./venv
     - python3 upload_to_figshare.py
     - echo "Graphs uploaded to Figshare successfully."
