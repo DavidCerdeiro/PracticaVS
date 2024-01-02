@@ -21,10 +21,10 @@ graph-job:
   stage: graph
   script:
     - echo "Installing dependencies..."
-    - apt-get install -y python3-venv  # Instala el paquete para crear entornos virtuales
-    - python3 -m venv venv  # Crea el entorno virtual
-    - source venv/bin/activate || true  # Activa el entorno virtual (agregué || true para evitar errores si no se activa)
-    - pip install pandas matplotlib  # Instala pandas y matplotlib
+    - apt-get install -y python3-venv
+    - python3 -m venv venv
+    - source venv/bin/activate || true
+    - pip install pandas matplotlib
     - echo "Generating graphs..."
     - python3 grafico.py
     - echo "Graph generation complete."
