@@ -1,7 +1,16 @@
 from __future__ import print_function
+import subprocess
+import sys
+from pprint import pprint
+
+# Instalar las dependencias necesarias
+subprocess.run(["pip", "install", "figshare"])
+
+# Agregar la ruta del paquete figshare al sys.path
+sys.path.append(sys.path[0] + '/venv/lib/python3.*/site-packages')
+
 import swagger_client
 from swagger_client.rest import ApiException
-from pprint import pprint
 
 # Configure OAuth2 access token for authorization: OAuth2
 swagger_client.configuration.access_token = 'YOUR_ACCESS_TOKEN'
