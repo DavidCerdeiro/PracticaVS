@@ -36,12 +36,12 @@ upload-job:
   stage: upload
   script:
     - echo "Uploading graphs to Figshare..."
-    - apt-get install -y python3-venv  # Instala el paquete para crear entornos virtuales
-    - python3 -m venv venv  # Crea el entorno virtual
-    - source venv/bin/activate || true  # Activa el entorno virtual (agregué || true para evitar errores si no se activa)
+    - apt-get install -y python3-venv
+    - python3 -m venv venv
+    - source venv/bin/activate || true
     - pip install figshare
-    - pip install requests  # Agrega esta línea para instalar el módulo requests
-    - ls .
-    - cp grafica_sensor.png ./venv  # Copia el PNG al directorio del entorno virtual
+    - pip install requests
+    - pip install git+https://github.com/figshare/figshare_api.git
+    - cp grafica_sensor.png ./venv  # Asegúrate de que la imagen esté en el directorio correcto
     - python3 upload_to_figshare.py
     - echo "Graphs uploaded to Figshare successfully."
