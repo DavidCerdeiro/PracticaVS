@@ -31,10 +31,15 @@ try:
     })
     response.raise_for_status()
     upload_data = response.json()
-    file_url = upload_data.get('upload_url')
+    file_url = upload_data.get('location')
 except requests.exceptions.RequestException as e:
     print(f"Error al obtener la URL de carga: {e}")
     print(f"Detalles del error: {response.text}")
+    exit(1)
+
+# Verificar si se obtuvo correctamente la URL de carga
+if not file_url:
+    print("No se pudo obtener la URL de carga del archivo.")
     exit(1)
 
 # Subir el archivo al artículo usando la URL obtenida
