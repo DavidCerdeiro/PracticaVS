@@ -35,7 +35,7 @@ def raw_issue_request(method, url, data=None, binary=False, files=None):
 
 
 def issue_request(method, endpoint, *args, **kwargs):
-    return raw_issue_request(method, BASE_URL.format(endpoint=24926016), *args, **kwargs)
+    return raw_issue_request(method, BASE_URL.format(endpoint=endpoint), *args, **kwargs)
 
 
 def list_articles():
