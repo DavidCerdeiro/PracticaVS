@@ -39,7 +39,7 @@ graph-job:
   stage: graph
   script:
     - echo "Generating graphs..."
-    - python grafico.py
+    - python3 grafico.py
     - echo "Graph generation complete."
 
 upload-job:
@@ -47,5 +47,5 @@ upload-job:
   script:
     - echo "Uploading graphs to Figshare..."
     - pip install figshare
-    - python upload_to_figshare.py
+    - python3 upload_to_figshare.py
     - echo "Graphs uploaded to Figshare successfully."
