@@ -44,7 +44,8 @@ if not file_url:
 # Subir el archivo al artículo usando la URL obtenida
 try:
     with open(file_path, 'rb') as file:
-        response = requests.put(file_url, headers={'Content-Type': 'application/octet-stream'}, data=file.read())
+        response = requests.put(file_url, headers={
+            'Authorization': f'Bearer {oauth_token}', 'Content-Type': 'application/octet-stream'}, data=file.read())
         response.raise_for_status()
 except requests.exceptions.RequestException as e:
     print(f"Error al subir el archivo: {e}")
