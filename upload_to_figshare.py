@@ -18,34 +18,18 @@ upload_url = f'https://api.figshare.com/v2/account/articles/24926016/files'
 # Obtener el tamaño del archivo
 file_size = os.path.getsize(file_path)
 
-# Realizar la solicitud para obtener la URL de carga del archivo
-try:
-    response = requests.post(upload_url, headers={
-        'Authorization': f'Bearer {oauth_token}',
-        'Content-Type': 'application/json'
-    }, json={
-        'name': article_title,
-        'description': article_description,
-        'size': file_size
-    })
-    response.raise_for_status()
-    upload_data = response.json()
-    file_url = upload_data.get('location')
-except requests.exceptions.RequestException as e:
-    print(f"Error al obtener la URL de carga: {e}")
-    print(f"Detalles del error: {response.text}")
-    exit(1)
-
-# Verificar si se obtuvo correctamente la URL de carga
-if not file_url:
-    print("No se pudo obtener la URL de carga del archivo.")
-    exit(1)
-
-# Subir el archivo al artículo usando la URL obtenida
+# Realizar la solicitud para obtener la URL de carga del archivo y cargar el archivo en una sola conexión
 try:
     with open(file_path, 'rb') as file:
-        response = requests.put(file_url, headers={
-            'Authorization': f'Bearer {oauth_token}', 'Content-Type': 'application/octet-stream'}, data=file.read())
+        response = requests.post(upload_url, headers={
+            'Authorization': f'Bearer {oauth_token}',
+            'Content-Type': 'application/octet-stream',
+            'Content-Disposition': f'attachment; filename={article_title}',
+        }, params={
+            'name': article_title,
+            'description': article_description,
+            'size': file_size
+        }, data=file.read())
         response.raise_for_status()
 except requests.exceptions.RequestException as e:
     print(f"Error al subir el archivo: {e}")
