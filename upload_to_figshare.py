@@ -5,10 +5,9 @@ def upload_to_figshare(file_path, figshare_token, article_id):
     # Configurar la URL de la API de Figshare para cargar archivos en un artículo específico
     upload_url = f'https://api.figshare.com/v2/account/articles/{article_id}/files'
 
-    # Configurar el encabezado con el token de Figshare y el tipo de contenido
+    # Configurar el encabezado con el token de Figshare
     headers = {
-        'Authorization': f'token {figshare_token}',
-        'Content-Type': 'image/png',
+        'Authorization': f'token {figshare_token}'
     }
 
     # Cargar el archivo al artículo de Figshare
