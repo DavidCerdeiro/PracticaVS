@@ -10,11 +10,10 @@ def upload_to_figshare(file_path, figshare_token, article_id):
         'Authorization': f'token {figshare_token}'
     }
 
-    # Crear una solicitud de carga de archivos con el encabezado y datos del archivo
+    # Cargar el archivo al artículo de Figshare
     with open(file_path, 'rb') as file:
         files = {'filedata': (os.path.basename(file_path), file)}
-        data = {'json': (None, '{"defined_type": 2}')}  # Definir el tipo de archivo como "dataset" (2)
-        response = requests.post(upload_url, headers=headers, files=files, data=data)
+        response = requests.post(upload_url, headers=headers, files=files)
 
     # Manejar la respuesta de Figshare
     if response.status_code == 201:
