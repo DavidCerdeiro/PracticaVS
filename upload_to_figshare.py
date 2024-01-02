@@ -3,7 +3,7 @@ import requests
 from pprint import pprint
 
 # Configure OAuth token for authorization
-oauth_token = '52eae7844e5a73ad33b324d61131c76d4fbc1477ad6ec9813ea5c749845f2a6e7d5eb16bf28f650835fb560a8e10dcb5d9a863c6491caed5615b1736197e3a52'
+oauth_token = '8b60245c20dfed8b906adde33d80c12eb8720e7b937ef4e29548785feb78a8087d0c9b81fe25a71b17640c25e934f21ef61af495815459f3c6b48827e28c529b'
 
 # Ruta del archivo PNG que deseas subir
 file_path = './grafica_sensor.png'
