@@ -4,7 +4,6 @@ from pprint import pprint
 
 # Configure OAuth token for authorization
 oauth_token = '52eae7844e5a73ad33b324d61131c76d4fbc1477ad6ec9813ea5c749845f2a6e7d5eb16bf28f650835fb560a8e10dcb5d9a863c6491caed5615b1736197e3a52'
-headers = {'Authorization': f'Bearer {oauth_token}'}
 
 # Ruta del archivo PNG que deseas subir
 file_path = './grafica_sensor.png'
@@ -17,11 +16,18 @@ article_description = 'Descripción de tu artículo en Figshare'
 upload_url = 'https://api.figshare.com/v2/account/articles/24926016/files'
 # Reemplaza '24926016' con el ID real de tu artículo
 
+# Obtener el tamaño del archivo
+file_size = os.path.getsize(file_path)
+
 # Realizar la solicitud para obtener la URL de carga del archivo
 try:
-    response = requests.post(upload_url, headers=headers, json={
+    response = requests.post(upload_url, headers={
+        'Authorization': f'Bearer {oauth_token}',
+        'Content-Type': 'application/json'
+    }, json={
         'name': article_title,
-        'description': article_description
+        'description': article_description,
+        'size': file_size
     })
     response.raise_for_status()
     upload_data = response.json()
