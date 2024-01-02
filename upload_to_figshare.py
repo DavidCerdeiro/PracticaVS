@@ -13,10 +13,10 @@ FILE_PATH = './grafica_sensor.png'
 ARTICLE_TITLE = 'My Article Title'
 
 
-def raw_issue_request(method, url, data=None, binary=False):
+def raw_issue_request(method, url, data=None, binary=False, files=None):
     headers = {'Authorization': 'token ' + TOKEN}
     if data is not None and not binary:
-        response = requests.post(url, headers=headers, json=data)
+        response = requests.post(url, headers=headers, json=data, files=files)
     else:
         response = requests.request(method, url, headers=headers, data=data)
     
