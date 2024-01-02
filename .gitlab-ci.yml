@@ -42,5 +42,5 @@ upload-job:
     - pip install figshare
     - pip install requests
     - cp grafica_sensor.png ./venv
-    - python3 upload_to_figshare.py ./venv/grafica_sensor.png  # Proporciona la ruta completa del archivo
+    - python3 upload_to_figshare.py
     - echo "Graphs uploaded to Figshare successfully."
