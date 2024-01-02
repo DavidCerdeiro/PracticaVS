@@ -1,6 +1,5 @@
 import os
 import requests
-import json
 
 def upload_to_figshare(file_path, figshare_token, article_id):
     # Configurar la URL de la API de Figshare para cargar archivos en un artículo específico
@@ -8,17 +7,13 @@ def upload_to_figshare(file_path, figshare_token, article_id):
 
     # Configurar el encabezado con el token de Figshare
     headers = {
-        'Authorization': f'token {figshare_token}',
-        'Content-Type': 'application/json',  # Especificar el tipo de contenido como JSON
+        'Authorization': f'token {figshare_token}'
     }
 
-    # Crear el objeto de carga útil JSON con el campo "filedata"
-    payload = {
-        'filedata': (os.path.basename(file_path), open(file_path, 'rb')),
-    }
-
-    # Enviar la solicitud a Figshare
-    response = requests.post(upload_url, headers=headers, files=payload)
+    # Cargar el archivo al artículo de Figshare
+    with open(file_path, 'rb') as file:
+        files = {'filedata': (os.path.basename(file_path), file)}
+        response = requests.post(upload_url, headers=headers, files=files)
 
     # Manejar la respuesta de Figshare
     if response.status_code == 201:
