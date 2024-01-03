@@ -1,53 +1,72 @@
-import os
-import requests
+stages:
+  - clone
+  - graph
+  - upload-job
+  - documentation
 
-# Configure OAuth token for authorization
-oauth_token = '8b60245c20dfed8b906adde33d80c12eb8720e7b937ef4e29548785feb78a8087d0c9b81fe25a71b17640c25e934f21ef61af495815459f3c6b48827e28c529b'
+variables:
+  FIGSHARE_APP_ID: $figshare  # Variable definida previamente
 
-# Ruta del archivo PNG que deseas subir
-file_path = './grafica_sensor.png'
+before_script:
+  - apt-get update -qy
+  - apt-get install -y python3-venv
 
-# Nombre y descripción del artículo en Figshare
-article_title = 'grafico.png'
-article_description = 'Archivo de imagen'
+clone-job:
+  stage: clone
+  script:
+    - echo "Cloning the repository..."
+    - git clone https://gitlab-ci-token:$CI_JOB_TOKEN@gitlab.com/$CI_PROJECT_PATH.git
+    - cd practica_gitlab
 
-# URL de la API de Figshare para subir un archivo
-upload_url = 'https://api.figshare.com/v2/account/articles/24926016/files'
+graph-job:
+  stage: graph
+  script:
+    - echo "Installing dependencies for graph job..."
+    - apt-get install -y python3-venv
+    - python3 -m venv venv
+    - source venv/bin/activate || true
+    - pip install pandas matplotlib
+    - echo "Generating graphs..."
+    - python3 grafico.py
+    - echo "Graph generation complete."
+  artifacts:
+    paths:
+      - grafica_sensor.png
 
-# Obtener el tamaño del archivo
-file_size = os.path.getsize(file_path)
+upload-job:
+  stage: upload
+  script:
+    - echo "Installing dependencies for upload job..."
+    - apt-get install -y python3-venv
+    - python3 -m venv venv
+    - source venv/bin/activate || true
+    - pip install figshare requests
+    - echo "Uploading graphs to Figshare..."
+    - cp grafica_sensor.png ./venv
+    - # python3 upload_to_figshare.py
+    - echo "Graphs uploaded to Figshare successfully."
+  dependencies:
+    - graph-job
+  artifacts:
+    paths:
+      - grafica_sensor.png
 
-# Step 1: Initiate file upload
-try:
-    initiate_response = requests.post(upload_url, headers={
-        'Authorization': f'Bearer {oauth_token}',
-        'Content-Type': 'application/json',
-    }, json={
-        'name': article_title,
-        'description': article_description,
-        'size': file_size
-    })
-    initiate_response.raise_for_status()
-    initiate_data = initiate_response.json()
-    upload_url = initiate_data.get('location')
-    upload_token = initiate_data.get('upload_token')
-except requests.exceptions.RequestException as e:
-    print(f"Error al iniciar la carga del archivo: {e}")
-    print(f"Detalles del error: {initiate_response.text}")
-    exit(1)
-
-# Step 2: Upload the file using the correct upload URL
-try:
-    with open(file_path, 'rb') as file:
-        response = requests.put(upload_url, headers={
-            'Authorization': f'Bearer {oauth_token}',
-            'Content-Type': 'application/octet-stream',
-            'Content-Disposition': f'attachment; filename={article_title}',
-            'Upload-Token': upload_token
-        }, data=file.read())  # Cambiado de data=file a data=file.read()
-        response.raise_for_status()
-except requests.exceptions.RequestException as e:
-    print(f"Error al subir el archivo: {e}")
-    exit(1)
-
-print("Archivo subido exitosamente.")
+documentation-job:
+  stage: documentation
+  script:
+    - echo "Installing dependencies for documentation job..."
+    - apt-get install -y python3-venv
+    - python3 -m venv venv
+    - source venv/bin/activate || true
+    - pip install mkdocs
+    - echo "Generating documentation..."
+    - mkdocs new .
+    - cp README.md docs/
+    - cp grafica_sensor.png docs/
+    - mkdocs build
+    - echo "Documentation generation complete."
+  dependencies:
+    - graph-job
+  artifacts:
+    paths:
+      - site/
