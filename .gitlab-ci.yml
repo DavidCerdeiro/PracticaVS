@@ -2,6 +2,7 @@ stages:
   - clone
   - graph
   - upload
+  - documentation
 
 variables:
   FIGSHARE_APP_ID: $figshare  # Variable definida previamente
@@ -42,5 +43,30 @@ upload-job:
     - pip install figshare requests
     - echo "Uploading graphs to Figshare..."
     - cp grafica_sensor.png ./venv
-    - python3 upload_to_figshare.py
+    # - python3 upload_to_figshare.py
     - echo "Graphs uploaded to Figshare successfully."
+  dependencies:
+    - graph-job
+  artifacts:
+    paths:
+      - grafica_sensor.png
+
+documentation-job:
+  stage: documentation
+  script:
+    - echo "Installing dependencies for documentation job..."
+    - apt-get install -y python3-venv
+    - python3 -m venv venv
+    - source venv/bin/activate || true
+    - pip install mkdocs
+    - echo "Generating documentation..."
+    - mkdocs new .
+    - cp README.md docs/
+    - cp grafica_sensor.png docs/
+    - mkdocs build
+    - echo "Documentation generation complete."
+  dependencies:
+    - graph-job
+  artifacts:
+    paths:
+      - site/
