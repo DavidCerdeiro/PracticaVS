@@ -1,0 +1,34 @@
+name: Deploy to GitHub Pages
+
+on:
+  workflow_run:
+    workflows: ["nombre_del_pipeline_en_gitlab"]
+    branches:
+      - main  # Cambia a la rama principal de tu repositorio
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.x  # Usa la versión de Python que necesitas
+
+    - name: Install dependencies
+      run: |
+        python -m venv venv
+        source venv/bin/activate
+        pip install grip
+
+    - name: Download HTML from GitLab artifacts
+      run: |
+        wget --quiet --output-document=site/index.html "https://gitlab.com/TU_USUARIO/TU_PROYECTO/-/jobs/CI_JOB_ID/artifacts/master/raw/site/index.html"
+
+    - name: Deploy to GitHub Pages
+      run: |
+        git push origin gh-pages  # Ajusta la rama según tu configuración
