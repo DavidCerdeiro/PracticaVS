@@ -83,8 +83,9 @@ generate-html-job:
     - mkdir -p site  # Crear el directorio 'site' si no existe
     - grip README.md --export site/index.html
     - echo "HTML article generation complete."
+    - cat site/index.html  # Mostrar el contenido del archivo HTML
   dependencies:
     - documentation-job
   artifacts:
     paths:
-      - site/index.html  # Ajusta la ruta y el nombre del artículo HTML si es necesario
+      - site/index.html
