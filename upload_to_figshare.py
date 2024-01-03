@@ -1,7 +1,7 @@
 stages:
   - clone
   - graph
-  - upload-job
+  - upload
   - documentation
 
 variables:
@@ -43,7 +43,6 @@ upload-job:
     - pip install figshare requests
     - echo "Uploading graphs to Figshare..."
     - cp grafica_sensor.png ./venv
-    - # python3 upload_to_figshare.py
     - echo "Graphs uploaded to Figshare successfully."
   dependencies:
     - graph-job
