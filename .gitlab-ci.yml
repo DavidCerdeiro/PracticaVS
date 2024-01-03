@@ -73,17 +73,18 @@ documentation-job:
       - site/
 
 generate-html-job:
-  stage: documentation
+  stage: generate-html
   script:
     - echo "Generating HTML article from README.md..."
     - apt-get install -y python3-venv
     - python3 -m venv venv
     - source venv/bin/activate || true
     - pip install grip
+    - mkdir -p site  # Crear el directorio 'site' si no existe
     - grip README.md --export site/index.html
     - echo "HTML article generation complete."
   dependencies:
     - documentation-job
   artifacts:
     paths:
-      - path/al/articulo.html  # Ajusta la ruta y el nombre del artículo HTML
+      - site/index.html  # Ajusta la ruta y el nombre del artículo HTML si es necesario
