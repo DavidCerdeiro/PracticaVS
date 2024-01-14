@@ -24,6 +24,11 @@ jobs:
         run: |
           ls -R gh-pages
           
+      - name: Configure Git Identity
+        run: |
+          git config --global user.email "ra.arilopez@alum.uca.es"
+          git config --global user.name "RaudulentoUCA"
+
       - name: Deploy to GitHub Pages
         run: |
           cd gh-pages
