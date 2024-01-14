@@ -27,15 +27,11 @@ jobs:
 
     - name: Download HTML from GitLab artifacts
       run: |
-        wget --quiet --output-document=site/index.html "https://gitlab.com/api/v4/jobs/5926230746/artifacts/raw/site/index.html"
-
-    - name: Copy README to gh-pages
-      run: |
-        cp README.md gh-pages/
+        wget --quiet --output-document=site/index.html "https://gitlab.com/api/v4/jobs/5926421123/artifacts/raw/site/index.html"
 
     - name: Deploy to GitHub Pages
       run: |
-        cd gh-pages
+        cd site
         git init
         git config user.name "${{ github.actor }}"
         git config user.email "${{ github.actor }}@users.noreply.github.com"
