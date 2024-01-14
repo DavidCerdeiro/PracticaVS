@@ -26,8 +26,8 @@ jobs:
           
       - name: Configure Git Identity
         run: |
-          git config --global user.email "ra.arilopez@alum.uca.es"
-          git config --global user.name "RaudulentoUCA"
+          git config --global user.email "davidcergall22@gmail.com"
+          git config --global user.name "DavidCerdeiro"
 
       - name: Deploy to GitHub Pages
         run: |
