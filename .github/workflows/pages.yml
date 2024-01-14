@@ -21,11 +21,15 @@ jobs:
         cp site/* gh-pages
         cp site/* .
 
+    - name: Upload index.html to artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: github-pages
+        path: gh-pages/index.html
+
     - name: Print Content of gh-pages
       run: |
-        ls -R gh-pages >> $GITHUB_STEP_SUMMARY
-        ls -R >> $GITHUB_STEP_SUMMARY
-        ls -R >> index.html
+        ls -R gh-pages
 
     - name: Deploy to GitHub Pages
       run: |
