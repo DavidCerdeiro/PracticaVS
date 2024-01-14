@@ -84,7 +84,7 @@ pool:
 ```
 Aquí vamos a definir la máquina virtual en la que se va a ejecutar los pasos del *Pipeline*, que en este caso, se utiliza la imagen "*ubuntu-latest*".
 
-La última sección de este archivo será de la de **stages**, donde definamos las etapas del Pipeline:
+La última sección de este archivo será de la de **stages**, donde definimos las etapas del Pipeline:
 ```yaml
 stages:
 - stage: BuildAndDeploy
@@ -139,7 +139,8 @@ stages:
           inputs:
             pollingTimeoutSec: '300'
 ```
-Donde la primera etapa:
+
+La primera etapa es la siguiente:
 ```yaml
 - stage: BuildAndDeploy
   displayName: 'Build and Deploy'
@@ -505,8 +506,6 @@ SonarQube: 'ServicioSonarQube'
       sonar.login=token
       sonar.security.enabled=true
 ```
-
-
 
 ### Pipeline - GitLab
 ##### Stages
