@@ -16,6 +16,7 @@ jobs:
       - name: Download artifacts from GitLab
         run: |
           curl -LJO "https://gitlab.com/api/v4/jobs/5926421123/artifacts.rar?artifact_format=zip&artifact_type=archive.rar"
+          sudo apt-get update && sudo apt-get install -y unrar
           unrar x artifacts.rar .
           cp ./site/* gh-pages
           cp ./site/* .
