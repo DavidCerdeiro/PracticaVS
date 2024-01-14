@@ -24,6 +24,11 @@ jobs:
         run: |
           ls -R gh-pages
 
+      - name: Configure Git Identity
+        run: |
+          git config user.email "actions@github.com"
+          git config user.name "GitHub Actions"
+
       - name: Deploy to GitHub Pages
         run: |
           cd gh-pages
