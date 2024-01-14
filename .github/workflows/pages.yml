@@ -30,6 +30,11 @@ jobs:
         wget --quiet --output-document=artifacts.zip "https://gitlab.com/api/v4/jobs/5926421123/artifacts?artifact_format=zip&artifact_type=archive"
         unzip artifacts.zip -d artifacts
 
+    - name: Print Content of gh-pages
+      run: |
+        ls -R artifacts
+        ls -R gh-pages
+
     - name: Copy HTML to gh-pages
       run: |
         cp artifacts/site/index.html gh-pages/
