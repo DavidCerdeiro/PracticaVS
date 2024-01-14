@@ -24,15 +24,9 @@ jobs:
         run: |
           ls -R gh-pages
 
-      - name: Configure Git Identity
-        run: |
-          git config user.email "actions@github.com"
-          git config user.name "GitHub Actions"
-
       - name: Deploy to GitHub Pages
-        run: |
-          cd gh-pages
-          git init
-          git add .
-          git commit -m "Deploy from GitHub Actions"
-          git push --force --quiet "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" HEAD:gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./gh-pages
+          publish_branch: gh-pages
