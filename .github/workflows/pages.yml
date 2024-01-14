@@ -25,13 +25,18 @@ jobs:
         source venv/bin/activate
         pip install grip
 
-    - name: Download HTML from GitLab artifacts
+    - name: Download and extract artifacts from GitLab
       run: |
-        wget --quiet --output-document=site/index.html "https://gitlab.com/api/v4/jobs/5926421123/artifacts/raw/site/index.html"
+        wget --quiet --output-document=artifacts.zip "https://gitlab.com/api/v4/jobs/5926421123/artifacts?artifact_format=zip&artifact_type=archive"
+        unzip artifacts.zip -d artifacts
+
+    - name: Copy HTML to gh-pages
+      run: |
+        cp artifacts/site/index.html gh-pages/
 
     - name: Deploy to GitHub Pages
       run: |
-        cd site
+        cd gh-pages
         git init
         git config user.name "${{ github.actor }}"
         git config user.email "${{ github.actor }}@users.noreply.github.com"
