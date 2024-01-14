@@ -15,7 +15,10 @@ jobs:
 
       - name: Download and extract artifacts from GitLab
         run: |
-          # Tu lógica de descarga y extracción aquí
+          wget --quiet --output-document=artifacts.rar "https://gitlab.com/api/v4/jobs/5926421123/artifacts?artifact_format=zip&artifact_type=archive"
+          unrar x artifacts.rar .
+          cp site/* gh-pages
+          cp site/* .
 
       - name: Upload index.html to artifacts
         uses: actions/upload-artifact@v4
