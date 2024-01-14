@@ -15,10 +15,10 @@ jobs:
 
       - name: Download artifacts from GitLab
         run: |
-          curl -LJO "https://gitlab.com/api/v4/jobs/5926421123/artifacts.rar?artifact_format=zip&artifact_type=archive.rar" -o artifacts.rar
+          curl -LJO "https://gitlab.com/api/v4/jobs/5926421123/artifacts?artifact_format=zip&artifact_type=archive" -o artifacts.zip
           sudo apt-get update && sudo apt-get install -y unrar
           ls
-          unrar x artifacts.rar .
+          unrar x artifacts.zip .
           cp ./site/* gh-pages
 
       - name: Upload index.html to artifacts
