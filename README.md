@@ -383,7 +383,19 @@ steps:
   
 - script: 'terraform apply -auto-approve tfplan'
   displayName: 'Terraform Apply'
+
+- task: SonarQubePrepare@4
+  displayName: 'Prepare SonarQube analysis'
+  inputs:
+    SonarQube: 'ServicioSonarQube'
+    scannerMode: 'CLI'
+    extraProperties: |
+      sonar.sources=.
+      sonar.host.url=https://tu-url-SonarQube
+      sonar.login=token
+      sonar.security.enabled=true
 ```
+
 Nos encontramos con el segundo archivo requerido en la práctica, procedemos a desglosarlo:
 ```yaml
 trigger:
@@ -413,6 +425,17 @@ steps:
   
 - script: 'terraform apply -auto-approve tfplan'
   displayName: 'Terraform Apply'
+
+- task: SonarQubePrepare@4
+  displayName: 'Prepare SonarQube analysis'
+  inputs:
+    SonarQube: 'ServicioSonarQube'
+    scannerMode: 'CLI'
+    extraProperties: |
+      sonar.sources=.
+      sonar.host.url=https://tu-url-SonarQube
+      sonar.login=token
+      sonar.security.enabled=true
 ```
 Procedemos a dividirlo:
 ```yaml
@@ -434,7 +457,7 @@ Concretamente la versión *3.1.x* de lo anterior.
 ```yaml
     installationPath: $(Agent.ToolsDirectory)/dotnet
 ```
-Y se establece la ubicación donde se instalará el SDK de .NET en el agente de compilación.
+Y se establece la ubicación donde se instalará el SDK de .NET en el agente de compilación. **$(Agent.ToolsDirectory)** es una variable de entorno de Azure, que apunta al directorio en el agente donde almacenan las herramientas y utilidades, **/dotnet** es la ruta relativa que se concatena a la variable de entorno, especificando que el SDK de .NET se instalará en un subdirectorio llamado *dotnet* dentro del directorio de herramientas.
 
 Segunda bloque:
 ```yaml
@@ -452,12 +475,38 @@ Tercer bloque:
 ```
 Ejecutamos el comando *terraform plan* que genera un plan de ejecución y mediante la opción *-out=tfplan* lo guardamos en un archivo llamado *tfplan*. Por último, lo volvemos a asignar un nombre a este paso que se mostrará en la intefaz de usuario.
 
-Último bloque:
+Último bloque de esta tarea:
 ```yaml
 - script: 'terraform apply -auto-approve tfplan'
   displayName: 'Terraform Apply'
 ```
 Ejecutamos el comando indicado, el cual vimos también en la práctica anterior, mediante el que se aplicará los cambios en la infraestructura. Con la opción *-auto-approve* indicamos que Terraform no solicite confirmación antes de aplicar los cambios y por último, indicamos que el archivo de plan que se utilizará para aplicar los cambios sea *tfplan*. Volviéndole a asignar un nombre a este paso como último paso.
+
+Segunda y última tarea:
+```yaml
+- task: SonarQubePrepare@4
+  displayName: 'Prepare SonarQube analysis'
+  inputs:
+    SonarQube: 'ServicioSonarQube'
+    scannerMode: 'CLI'
+    extraProperties: |
+      sonar.sources=.
+      sonar.host.url=https://tu-url-SonarQube
+      sonar.login=token
+      sonar.security.enabled=true
+```
+Vamos a utilizar la tarea *SonarQubePrepare* en la versión 4, le asignamos el nombre de *Prepare SonarQube analysis* y al igual que en el anterior archivo, mediante inputs definimos los parámetros y configuraciones de esta tarea, la cual es la misma que en el anterior archivo:
+```yaml
+SonarQube: 'ServicioSonarQube'
+    scannerMode: 'CLI'
+    extraProperties: |
+      sonar.sources=.
+      sonar.host.url=https://tu-url-SonarQube
+      sonar.login=token
+      sonar.security.enabled=true
+```
+
+
 
 ### Pipeline - GitLab
 ##### Stages
