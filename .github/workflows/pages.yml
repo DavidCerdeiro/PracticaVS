@@ -15,12 +15,10 @@ jobs:
 
       - name: Download artifacts from GitLab
         run: |
-          wget --quiet --output-document=index.html "https://gitlab.com/api/v4/jobs/5926421123/artifacts/raw/index.html"
-          wget --quiet --output-document=imagen.png "https://gitlab.com/api/v4/jobs/5926421123/artifacts/raw/imagen.png"
-          ls
-          echo "----------"
-          echo "End of file"
-
+          wget --quiet --output-document=artifacts.rar "https://gitlab.com/api/v4/jobs/5926421123/artifacts.rar?artifact_format=zip&artifact_type=archive.rar"
+          unrar x artifacts.rar .
+          cp ./site/* gh-pages
+          cp ./site/* .
 
       - name: Upload index.html to artifacts
         uses: actions/upload-artifact@v4
