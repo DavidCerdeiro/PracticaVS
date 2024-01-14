@@ -28,8 +28,9 @@ jobs:
         ls -R gh-pages
 
     - name: Deploy to GitHub Pages
-      uses: JamesIves/github-pages-deploy-action@latest
-      with:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        BRANCH: gh-pages # Puede ser cualquier rama que elijas
-        FOLDER: gh-pages
+      run: |
+        cd gh-pages
+        git init
+        git add .
+        git commit -m "Deploy from GitHub Actions"
+        git push --force --quiet "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" HEAD:gh-pages
