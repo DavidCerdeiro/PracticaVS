@@ -54,12 +54,12 @@ stages:
       steps:
         - task: SonarQubePrepare@4
           inputs:
-            SonarQube: 'YourSonarQubeServiceConnection'
+            SonarQube: 'ServicioSonarQube'
             scannerMode: 'CLI'
             extraProperties: |
               sonar.sources=.
-              sonar.host.url=https://your-sonarqube-instance
-              sonar.login=your-sonarqube-token
+              sonar.host.url=https://tu-url-SonarQube
+              sonar.login=token
 
         - task: SonarQubeAnalyze@4
 
@@ -126,12 +126,12 @@ stages:
       steps:
         - task: SonarQubePrepare@4
           inputs:
-            SonarQube: 'YourSonarQubeServiceConnection'
+            SonarQube: 'ServicioSonarQube'
             scannerMode: 'CLI'
             extraProperties: |
               sonar.sources=.
-              sonar.host.url=https://your-sonarqube-instance
-              sonar.login=your-sonarqube-token
+              sonar.host.url=https://tu-url-SonarQube
+              sonar.login=token
 
         - task: SonarQubeAnalyze@4
 
@@ -256,7 +256,7 @@ Se vuelve a indicar que se utilizará la versión más reciente de la imagen, en
 ```yaml
       containerRegistry: 'practicaVS'
 ```
-Indicamos el nombre del registro de contenedores al que se enviará la imagen, en nuestro caso, "*practicaVS*".
+Indicamos el nombre del registro de contenedores al que se enviará la imagen, por ejemplo, "*practicaVS*".
 
 Nos quedaría la última tarea:
 ```yaml
@@ -280,11 +280,84 @@ Se indica la ubicación del archivo de configuración de Docker Compose que se u
 ```yaml
       removeContainersOnPull: true
 ```
-Al darle el valor de verdadero, se eliminarán los contenedores existentes al realizar la operación de *pull*.
+Al darle el valor de verdadero, se eliminarán los contenedores existentes, justo antes de realizar la operación de *pull*.
 ```yaml
       detachedService: true
 ```
 Mediante esto, los servicios definidos en el archivo de Docker Compose, **docker-compose.yml**, se ejecutarán en segundo plano.
+
+Esta sería la primera etapa, la segunda es la siguiente:
+```yaml
+- stage: SecurityScan
+  displayName: 'Security Scan with SonarQube'
+  jobs:
+    - job: SonarQubeScan
+      displayName: 'SonarQube Scan'
+      steps:
+        - task: SonarQubePrepare@4
+          inputs:
+            SonarQube: 'ServicioSonarQube'
+            scannerMode: 'CLI'
+            extraProperties: |
+              sonar.sources=.
+              sonar.host.url=https://tu-url-SonarQube
+              sonar.login=token
+
+        - task: SonarQubeAnalyze@4
+
+        - task: SonarQubePublish@4
+          inputs:
+            pollingTimeoutSec: '300'
+```
+Al igual que a la anterior etapa, le daremos el nombre de *Security Scan with SonarQube*, que se mostrará en en el Pipeline de Azure y al igual también que en la etapa anterior, definimos un único trabajo, de trabajo *SonarQube Scan*, que va a emplear tres tareas:
+```yaml
+- job: SonarQubeScan
+      displayName: 'SonarQube Scan'
+      steps:
+        - task: SonarQubePrepare@4
+          inputs:
+            SonarQube: 'ServicioSonarQube'
+            scannerMode: 'CLI'
+            extraProperties: |
+              sonar.sources=.
+              sonar.host.url=https://tu-url-SonarQube
+              sonar.login=token
+
+        - task: SonarQubeAnalyze@4
+
+        - task: SonarQubePublish@4
+          inputs:
+            pollingTimeoutSec: '300'
+
+```
+La primera tarea es la de *SonarQubePrepare* en su versión 4, mediante el bloque *inputs* vamos a realizar la configuración de este servicio:
+```yaml
+SonarQube: 'ServicioSonarQube'
+```
+Mediante esta línea indicamos el nombre del servicio de conexión de SonarQube a utilizar en la integración, por ejemplo, *ServicioSonarQube*.
+
+```yaml
+scannerMode: 'CLI'
+```
+Establecemos el modo del escáner de SonarQube, en este caso, se utilizará el escáner de línea de comandos, *CLI*.
+
+```yaml
+extraProperties: |
+  sonar.sources=.
+  sonar.host.url=https://tu-url-SonarQube
+  sonar.login=token
+```
+Especificamos propiedades adicionales, mediante la primera línea indicamos que se deben analizar todas las fuentes de código que se encuentren en el directorio actual, con la segunda, especificamos la URL de la instancia de SonarQube a utilizar. Por último, asignamos el token de autenticación que se va a usar a para conectarse.
+
+```yaml
+- task: SonarQubeAnalyze@4
+
+- task: SonarQubePublish@4
+  inputs:
+    pollingTimeoutSec: '300'
+```
+La segunda tarea a realizar sería la de *SonarQubeAnalyze* en versión 4, el cual, será para realizar el análisis estático del código. La tercera y última, sería la de *SonarQubePublish*, en versión 4 también, el cual publica los resultados del análisis en la instancia de SonarQube, estableciéndole un tiempo máximo de espera de 300 segundos para la publicación de los resultados.
+
 ### azure-pipelines.yml - Práctica 2
 ```yaml
 trigger:
