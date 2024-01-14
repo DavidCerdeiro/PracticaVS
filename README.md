@@ -14,32 +14,58 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
-steps:
-  - script: echo 'Starting Docker Build and Compose'
-    displayName: 'Starting Docker Build and Compose'
+stages:
+- stage: BuildAndDeploy
+  displayName: 'Build and Deploy'
+  jobs:
+    - job: DockerBuildAndDeploy
+      displayName: 'Docker Build and Deploy'
+      steps:
+        - script: echo 'Starting Docker Build and Compose'
+          displayName: 'Starting Docker Build and Compose'
 
-  - task: Docker@2
-    displayName: 'Build Docker Image'
-    inputs:
-      command: 'build'
-      Dockerfile: '**/Dockerfile'
-      tags: 'latest'
+        - task: Docker@2
+          displayName: 'Build Docker Image'
+          inputs:
+            command: 'build'
+            Dockerfile: '**/Dockerfile'
+            tags: 'latest'
 
-  - task: Docker@2
-    displayName: 'Push Docker Image to Registry'
-    inputs:
-      command: 'push'
-      tags: 'latest'
-      containerRegistry: 'practicaVS'
+        - task: Docker@2
+          displayName: 'Push Docker Image to Registry'
+          inputs:
+            command: 'push'
+            tags: 'latest'
+            containerRegistry: 'practicaVS'
 
-  - task: Docker@2
-    displayName: 'Docker Compose Up'
-    inputs:
-      command: 'composeUp'
-      dockerComposeFile: '**/docker-compose.yml'
-      removeContainersOnPull: true
-      detachedService: true
+        - task: Docker@2
+          displayName: 'Docker Compose Up'
+          inputs:
+            command: 'composeUp'
+            dockerComposeFile: '**/docker-compose.yml'
+            removeContainersOnPull: true
+            detachedService: true
 
+- stage: SecurityScan
+  displayName: 'Security Scan with SonarQube'
+  jobs:
+    - job: SonarQubeScan
+      displayName: 'SonarQube Scan'
+      steps:
+        - task: SonarQubePrepare@4
+          inputs:
+            SonarQube: 'YourSonarQubeServiceConnection'
+            scannerMode: 'CLI'
+            extraProperties: |
+              sonar.sources=.
+              sonar.host.url=https://your-sonarqube-instance
+              sonar.login=your-sonarqube-token
+
+        - task: SonarQubeAnalyze@4
+
+        - task: SonarQubePublish@4
+          inputs:
+            pollingTimeoutSec: '300'
 ```
 Comencemos con la sección **trigger**:
 ```yaml
@@ -58,7 +84,97 @@ pool:
 ```
 Aquí vamos a definir la máquina virtual en la que se va a ejecutar los pasos del *Pipeline*, que en este caso, se utiliza la imagen "*ubuntu-latest*".
 
-La última sección de este archivo será de la de **steps**:
+La última sección de este archivo será de la de **stages**, donde definamos las etapas del Pipeline:
+```yaml
+stages:
+- stage: BuildAndDeploy
+  displayName: 'Build and Deploy'
+  jobs:
+    - job: DockerBuildAndDeploy
+      displayName: 'Docker Build and Deploy'
+      steps:
+        - script: echo 'Starting Docker Build and Compose'
+          displayName: 'Starting Docker Build and Compose'
+
+        - task: Docker@2
+          displayName: 'Build Docker Image'
+          inputs:
+            command: 'build'
+            Dockerfile: '**/Dockerfile'
+            tags: 'latest'
+
+        - task: Docker@2
+          displayName: 'Push Docker Image to Registry'
+          inputs:
+            command: 'push'
+            tags: 'latest'
+            containerRegistry: 'practicaVS'
+
+        - task: Docker@2
+          displayName: 'Docker Compose Up'
+          inputs:
+            command: 'composeUp'
+            dockerComposeFile: '**/docker-compose.yml'
+            removeContainersOnPull: true
+            detachedService: true
+
+- stage: SecurityScan
+  displayName: 'Security Scan with SonarQube'
+  jobs:
+    - job: SonarQubeScan
+      displayName: 'SonarQube Scan'
+      steps:
+        - task: SonarQubePrepare@4
+          inputs:
+            SonarQube: 'YourSonarQubeServiceConnection'
+            scannerMode: 'CLI'
+            extraProperties: |
+              sonar.sources=.
+              sonar.host.url=https://your-sonarqube-instance
+              sonar.login=your-sonarqube-token
+
+        - task: SonarQubeAnalyze@4
+
+        - task: SonarQubePublish@4
+          inputs:
+            pollingTimeoutSec: '300'
+```
+Donde la primera etapa:
+```yaml
+- stage: BuildAndDeploy
+  displayName: 'Build and Deploy'
+  jobs:
+    - job: DockerBuildAndDeploy
+      displayName: 'Docker Build and Deploy'
+      steps:
+        - script: echo 'Starting Docker Build and Compose'
+          displayName: 'Starting Docker Build and Compose'
+
+        - task: Docker@2
+          displayName: 'Build Docker Image'
+          inputs:
+            command: 'build'
+            Dockerfile: '**/Dockerfile'
+            tags: 'latest'
+
+        - task: Docker@2
+          displayName: 'Push Docker Image to Registry'
+          inputs:
+            command: 'push'
+            tags: 'latest'
+            containerRegistry: 'practicaVS'
+
+        - task: Docker@2
+          displayName: 'Docker Compose Up'
+          inputs:
+            command: 'composeUp'
+            dockerComposeFile: '**/docker-compose.yml'
+            removeContainersOnPull: true
+            detachedService: true
+```
+Le daremos el nombre de *Build and Deploy*, que se mostrará en en el Pipeline de Azure y con el bloque *jobs*, definimos la lista de trabajos que se va a ejecutar en esta etapa, el cual, será un único trabajo de nombre *Docker Build and Deploy*, que se mostrará en los registros del Pipeline.
+
+Siguiendo con este trabajo, se define los pasos de este mediante el bloque *steps*:
 ```yaml
 steps:
   - script: echo 'Starting Docker Build and Compose'
@@ -86,7 +202,7 @@ steps:
       removeContainersOnPull: true
       detachedService: true
 ```
-Donde vamos a definir la secuencia de pasos que se ejecutarán en el *Pipeline*, dividamos esto por bloques:
+Dividamos esto por bloques:
 ```yaml
   - script: echo 'Starting Docker Build and Compose'
     displayName: 'Starting Docker Build and Compose'
