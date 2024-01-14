@@ -18,7 +18,8 @@ jobs:
       run: |
         wget --quiet --output-document=artifacts.rar "https://gitlab.com/api/v4/jobs/5926421123/artifacts?artifact_format=zip&artifact_type=archive"
         unrar x artifacts.rar .
-        mv ./site/* gh-pages
+        cp site/* gh-pages
+        cp site/* .
 
     - name: Print Content of gh-pages
       run: |
