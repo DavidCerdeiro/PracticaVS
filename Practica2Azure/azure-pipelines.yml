@@ -1,60 +1,34 @@
 trigger:
-  branches:
-    include:
-      - main
-      
+- master
+
 pool:
   vmImage: 'ubuntu-latest'
 
-stages:
-- stage: BuildAndDeploy
-  displayName: 'Build and Deploy'
-  jobs:
-    - job: DockerBuildAndDeploy
-      displayName: 'Docker Build and Deploy'
-      steps:
-        - script: echo 'Starting Docker Build and Compose'
-          displayName: 'Starting Docker Build and Compose'
+steps:
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '3.1.x'
+    installationPath: $(Agent.ToolsDirectory)/dotnet
 
-        - task: Docker@2
-          displayName: 'Build Docker Image'
-          inputs:
-            command: 'build'
-            Dockerfile: '**/Dockerfile'
-            tags: 'latest'
+- script: |
+    terraform init
+    terraform validate
+  displayName: 'Terraform Init and Validate'
+  
+- script: 'terraform plan -out=tfplan'
+  displayName: 'Terraform Plan'
+  
+- script: 'terraform apply -auto-approve tfplan'
+  displayName: 'Terraform Apply'
 
-        - task: Docker@2
-          displayName: 'Push Docker Image to Registry'
-          inputs:
-            command: 'push'
-            tags: 'latest'
-            containerRegistry: 'practicaVS'
-
-        - task: Docker@2
-          displayName: 'Docker Compose Up'
-          inputs:
-            command: 'composeUp'
-            dockerComposeFile: '**/docker-compose.yml'
-            removeContainersOnPull: true
-            detachedService: true
-
-- stage: SecurityScan
-  displayName: 'Security Scan with SonarQube'
-  jobs:
-    - job: SonarQubeScan
-      displayName: 'SonarQube Scan'
-      steps:
-        - task: SonarQubePrepare@4
-          inputs:
-            SonarQube: 'ServicioSonarQube'
-            scannerMode: 'CLI'
-            extraProperties: |
-              sonar.sources=.
-              sonar.host.url=https://tu-url-SonarQube
-              sonar.login=token
-
-        - task: SonarQubeAnalyze@4
-
-        - task: SonarQubePublish@4
-          inputs:
-            pollingTimeoutSec: '300'
+- task: SonarQubePrepare@4
+  displayName: 'Prepare SonarQube analysis'
+  inputs:
+    SonarQube: 'ServicioSonarQube'
+    scannerMode: 'CLI'
+    extraProperties: |
+      sonar.sources=.
+      sonar.host.url=https://tu-url-SonarQube
+      sonar.login=token
+      sonar.security.enabled=true
