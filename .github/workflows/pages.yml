@@ -17,7 +17,8 @@ jobs:
     - name: Download and extract artifacts from GitLab
       run: |
         wget --quiet --output-document=artifacts.rar "https://gitlab.com/api/v4/jobs/5926421123/artifacts?artifact_format=zip&artifact_type=archive"
-        unzip -q artifacts.rar -d gh-pages
+        unrar x artifacts.rar .
+        mv ./site/* gh-pages
 
     - name: Print Content of gh-pages
       run: |
@@ -25,7 +26,7 @@ jobs:
 
     - name: Deploy to GitHub Pages
       run: |
-        cd gh-pages/site
+        cd gh-pages
         git init
         git add .
         git commit -m "Deploy from GitHub Actions"
