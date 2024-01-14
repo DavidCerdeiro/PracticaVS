@@ -4,7 +4,7 @@ on:
   workflow_run:
     workflows: ["practica_gitlab"]
     branches:
-      - main  # Cambia a la rama principal de tu repositorio
+      - main
 
 jobs:
   deploy:
@@ -17,7 +17,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: 3.x  # Usa la versión de Python que necesitas
+        python-version: 3.x
 
     - name: Install dependencies
       run: |
@@ -28,14 +28,17 @@ jobs:
     - name: Download HTML from GitLab artifacts
       run: |
         wget --quiet --output-document=site/index.html "https://gitlab.com/api/v4/jobs/5926230746/artifacts/raw/site/index.html"
+
+    - name: Copy README to gh-pages
+      run: |
+        cp README.md gh-pages/
+
     - name: Deploy to GitHub Pages
       run: |
-        mkdir gh-pages
-        cp site/index.html gh-pages/ || exit 1
-        cd gh-pages || exit 1
-        git init || exit 1
-        git config user.name "${{ github.actor }}" || exit 1
-        git config user.email "${{ github.actor }}@users.noreply.github.com" || exit 1
-        git add . || exit 1
-        git commit -m "Deploy from GitHub Actions" || exit 1
-        git push --force --quiet "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" master:gh-pages || exit 1
+        cd gh-pages
+        git init
+        git config user.name "${{ github.actor }}"
+        git config user.email "${{ github.actor }}@users.noreply.github.com"
+        git add .
+        git commit -m "Deploy from GitHub Actions"
+        git push --force --quiet "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" master:gh-pages
