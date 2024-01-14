@@ -15,10 +15,10 @@ jobs:
 
       - name: Download artifacts from GitLab
         run: |
-          curl -LJO "https://gitlab.com/api/v4/jobs/5926421123/artifacts?artifact_format=zip&artifact_type=archive" -o artifacts.zip
+          curl -LJO 'https://gitlab.com/api/v4/jobs/5926421123/artifacts?artifact_format=zip&artifact_type=archive' -o artifacts.zip
           sudo apt-get install -y unzip
-          unzip artifacts* -d artifacts
-          cp /artifacts/site/* gh-pages
+          unzip artifacts.zip -d artifacts
+          cp -r artifacts/site/* gh-pages
 
       - name: Print Content of gh-pages
         run: |
