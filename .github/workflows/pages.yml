@@ -19,10 +19,6 @@ jobs:
         wget --quiet --output-document=artifacts.zip "https://gitlab.com/api/v4/jobs/5926421123/artifacts?artifact_format=zip&artifact_type=archive"
         unzip -q artifacts.zip -d gh-pages
 
-    - name: Remove README from gh-pages
-      run: |
-        rm gh-pages/README.md
-
     - name: Print Content of gh-pages
       run: |
         ls -R gh-pages
@@ -30,6 +26,7 @@ jobs:
     - name: Deploy to GitHub Pages
       run: |
         cd gh-pages
+        mv site/index.html .
         git init
         git add .
         git commit -m "Deploy from GitHub Actions"
