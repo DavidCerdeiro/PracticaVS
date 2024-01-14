@@ -1,8 +1,8 @@
-name: Deploy to GitHub Pages
+name: Deploy GitHub-Pages
 
 on:
   workflow_run:
-    workflows: ["nombre_del_pipeline_en_gitlab"]
+    workflows: ["practica_gitlab"]
     branches:
       - main  # Cambia a la rama principal de tu repositorio
 
@@ -27,8 +27,7 @@ jobs:
 
     - name: Download HTML from GitLab artifacts
       run: |
-        wget --quiet --output-document=site/index.html "https://gitlab.com/TU_USUARIO/TU_PROYECTO/-/jobs/CI_JOB_ID/artifacts/master/raw/site/index.html"
-
+        wget --quiet --output-document=site/index.html "https://gitlab.com/api/v4/jobs/5926230746/artifacts/raw/site/index.html"
     - name: Deploy to GitHub Pages
       run: |
         git push origin gh-pages  # Ajusta la rama según tu configuración
