@@ -16,17 +16,11 @@ jobs:
       - name: Download and extract artifacts from GitLab
         run: |
           curl -LJO "https://gitlab.com/api/v4/jobs/5926421123/artifacts?artifact_format=zip&artifact_type=archive"
+          mv artifacts artifacts.rar
+          unrar x artifacts.rar .
           ls
-          file artifacts
-          # Determinar el formato del archivo y ajustar el comando de extracción
-          if file artifacts | grep -q "Zip archive data"; then
-            unzip -q artifacts -d gh-pages
-          elif file artifacts | grep -q "RAR archive data"; then
-            unrar x artifacts gh-pages
-          else
-            echo "Formato de archivo desconocido, no se puede extraer."
-            exit 1
-          fi
+          echo "----------"
+          echo "End of file"
           cp site/* gh-pages
           cp site/* .
 
