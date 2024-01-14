@@ -15,7 +15,7 @@ jobs:
 
       - name: Download and extract artifacts from GitLab
         run: |
-          wget --quiet --output-document=artifacts.rar "https://gitlab.com/api/v4/jobs/5926421123/artifacts?artifact_format=zip&artifact_type=archive"
+          curl -LJO "https://gitlab.com/api/v4/jobs/5926421123/artifacts?artifact_format=zip&artifact_type=archive"
           unrar x artifacts.rar .
           cp site/* gh-pages
           cp site/* .
