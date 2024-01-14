@@ -13,11 +13,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Download and extract artifacts from GitLab
+      - name: Download artifacts from GitLab
         run: |
-          curl -LJO "https://gitlab.com/api/v4/jobs/5926421123/artifacts?artifact_format=zip&artifact_type=archive"
-          mv artifacts artifacts.rar
-          unrar x artifacts.rar .
+          wget --quiet --output-document=index.html "https://gitlab.com/api/v4/jobs/5926421123/artifacts/raw/index.html"
+          wget --quiet --output-document=imagen.png "https://gitlab.com/api/v4/jobs/5926421123/artifacts/raw/imagen.png"
           ls
           echo "----------"
           echo "End of file"
