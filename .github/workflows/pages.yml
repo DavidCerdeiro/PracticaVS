@@ -24,7 +24,7 @@ jobs:
     - name: Print Content of gh-pages
       run: |
         ls -R gh-pages >> $GITHUB_STEP_SUMMARY
-        ls
+        ls -R
 
     - name: Deploy to GitHub Pages
       run: |
