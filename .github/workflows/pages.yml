@@ -27,8 +27,6 @@ jobs:
       - name: Deploy to GitHub Pages
         run: |
           cd gh-pages
-          git config user.name "${{ github.actor }}"
-          git config user.email "${{ github.actor }}@users.noreply.github.com"
           git init
           git add .
           git commit -m "Deploy from GitHub Actions"
