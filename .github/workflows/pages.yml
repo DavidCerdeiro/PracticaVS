@@ -15,12 +15,10 @@ jobs:
 
       - name: Download artifacts from GitLab
         run: |
-          curl -LJO "https://gitlab.com/vs_uca_raulydavid/practica_gitlab/-/jobs/5926421123/artifacts/download" -o artifacts.zip
+          curl --location -o artifacts.zip "https://vs_uca_raulydavid.gitlab.io/-/practica_gitlab/-/jobs/5926421123/artifacts/site/index.html"
           ls -l    # Agregado para verificar si el archivo se descargó correctamente
-          sudo apt-get install -y unzip
-          unzip artifacts.zip -d artifacts
-          ls -l artifacts  # Agregado para verificar el contenido de la carpeta "artifacts"
-          cp -r artifacts/site/* gh-pages
+          mkdir -p gh-pages
+          cp index.html gh-pages/
 
       - name: Print Content of gh-pages
         run: |
